@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { bcs } from '@initia/initia.js';
+import { LCDClient, bcs } from '@initia/initia.js';
 import { HttpsProxyAgent } from 'https-proxy-agent';
 import { wrapper } from 'axios-cookiejar-support';
 import { CookieJar } from 'tough-cookie'
@@ -70,7 +70,6 @@ async function mintNFT(address) {
                 bcs.address().serialize(address).toBase64()
             ]
         }, {})
-
         return JSON.parse(request.data.data)
     } catch (error) {
         logger.error(error.response)

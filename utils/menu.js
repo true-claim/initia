@@ -7,7 +7,7 @@ export const entryPoint = async () => {
             message: 'Действие:',
             choices: [
                 {
-                    name: 'UPDATE WALLETS',
+                    name: 'UPDATE WALLETS. 1 STEP!!',
                     value: 'update',
                 },
                 {
@@ -17,6 +17,10 @@ export const entryPoint = async () => {
                 {
                     name: 'XP Check',
                     value: 'xp',
+                },
+                {
+                    name: 'HP Status',
+                    value: 'hp',
                 },
                 // {
                 //     name: 'XP Farm',

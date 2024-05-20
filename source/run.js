@@ -2,6 +2,7 @@ import {addUsers, getUsers, usersStatusWeeks} from '../module/prisma.js';
 import {getBalance} from '../module/initiation-1.js';
 import {balanceXP, mintNFT, jennieStat}  from '../module/request.js';
 import {mintTaskNFT, allTasks, buildJennie} from '../source/week/week1_pashka.js';
+import {drawFood, feedJennie} from './jennie.js';
 
 import {random_MinutesDelay} from '../utils/random.js';
 import { entryPoint } from '../utils/menu.js';
@@ -88,6 +89,22 @@ async function week01() {
     }))
 }
 
+async function feed() {
+    let logger = makeLogger('feed')
+    let users = await getUsers()
+    for (let user of users) {
+        let xp = await balanceXP(user.address)
+        if(xp < 200) {
+            logger.info('Не хватает XP на еду.')
+            continue;
+        }
+        await drawFood(user.seed_phrase, user.address)
+        await feedJennie(user.seed_phrase, user.address)
+        let xpnew = await balanceXP(user.address)
+        logger.info('XP NEW ->', xpnew, '\n')
+    }
+}
+
 async function EXAMPLE() {
     let users = await getUsers()
     for (let user of users) {
@@ -111,11 +128,14 @@ async function startMenu() {
         case 'xp':
             await xp()
             break;
+        case 'hp':
+            await statsHP()
+            break;
         case 'farm':
             console.log('😄')
             break;
         case 'feed':
-            await statsHP()
+            await feed()
             break;
         case '01':
             await week01()
