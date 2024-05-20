@@ -68,6 +68,9 @@ async function task1(mnemonic, address) {
                 );
                 const signedTx = await wallet.createAndSignTx({ msgs: [sendMsg] });
                 const broadcastResult = await lcd.tx.broadcast(signedTx).then((result) => {
+                    if(result.code === 400) {
+                    throw res.raw_log
+                }
                     logger.info(`Successfully bought domain! ${result?.txhash}`);
                 })
                 
@@ -88,8 +91,12 @@ async function task1(mnemonic, address) {
                     'set_name',                                 
                     [], [nameCode])
                 const signedTxset = await wallet.createAndSignTx({msgs: [setMsg]})
-                const broadcastResult2 = await lcd.tx.broadcast(signedTxset);
+                const broadcastResult2 = await lcd.tx.broadcast(signedTxset).then((result) => {
+                    if(res.code === 400) throw res.raw_log
+            
                 logger.info(`Successfully set name!`);
+
+                })
             } catch (error) {
                 logger.error(`Failed to set name: ${error?.response?.data?.message}`, error?.response?.data?.code);
                 await random_SecondsDelay(5, 120)
@@ -141,6 +148,7 @@ async function task2(mnemonic, address) {
 
             const signedTx = await wallet.createAndSignTx({ msgs });
             let broadcastResult = await lcd.tx.broadcastSync(signedTx).then(res => {
+                if(res.code === 400) throw res.raw_log
                 logger.info(`Успешый свапнул: https://scan.testnet.initia.xyz/initiation-1/txs/${res.txhash}`)
             })
             
@@ -189,6 +197,8 @@ async function task3(mnemonic, address) {
                     }
                     retryStake()
                 }
+                if(res.code === 400) throw res.raw_log
+
                 logger.info('Успешный стейкинг стейкинг: https://scan.testnet.initia.xyz/initiation-1/txs/' + res.txhash)
             });
             //Иногда then присылает такое 
@@ -244,6 +254,8 @@ async function task4(mnemonic, address) {
 
             const signedTx = await wallet.createAndSignTx({ msgs });
             let broadcastResult = await lcd.tx.broadcastSync(signedTx).then((res) => {
+                                    if(res.code === 400) throw res.raw_log
+
                 logger.info(`Успешый lp provide: https://scan.testnet.initia.xyz/initiation-1/txs/${res.txhash}`)
             })
             
@@ -281,6 +293,8 @@ async function task5(mnemonic, address) {
 
         const signedTx = await wallet.createAndSignTx({ msgs });
         let broadcastResult = await lcd.tx.broadcastSync(signedTx).then(res => {
+                                if(res.code === 400) throw res.raw_log
+
             logger.info(`Успешый минт реварда: https://scan.testnet.initia.xyz/initiation-1/txs/${res.txhash}`)
         });
         
@@ -321,7 +335,7 @@ async function allTasks(task, mnemonicm, address) {
 
 async function mintTaskNFT(mnemonic, address, numberNFT) {
     let logger = makeLogger('mintTaskNFT')
-    await random_SecondsDelay(300, 1500)
+    await random_SecondsDelay(600, 1500)
     try {
         const key = new MnemonicKey({
             mnemonic,
@@ -353,14 +367,16 @@ async function mintTaskNFT(mnemonic, address, numberNFT) {
     })
     
     const broadcastResult = await lcd.tx.broadcast(signedTx).then(res => {
-      logger.info(`Успешый минт NFT! https://scan.testnet.initia.xyz/initiation-1/txs/${res.txhash} \n`)  
+                          if(res.code === 400) throw res.raw_log
+
+        logger.info(`Успешый минт NFT! https://scan.testnet.initia.xyz/initiation-1/txs/${res.txhash} \n`)  
     })
     
             
 
     } catch (error) {
         logger.error(`Error minttask NFT ${error?.response?.data?.message}`, error?.response?.data?.code)
-        await random_SecondsDelay(5, 120)
+        await random_SecondsDelay(600, 1200)
         await mintTaskNFT(mnemonic, address, numberNFT)
     }
 }
@@ -391,13 +407,15 @@ async function buildJennie(mnemonic, address) {
     })
     
     const broadcastResult = await lcd.tx.broadcast(signedTx).then(res => {
-      logger.info(`Успешный минт Jennie! https://scan.testnet.initia.xyz/initiation-1/txs/${res.txhash} \n`)
+                         if(res.code === 400) throw res.raw_log
+
+        logger.info(`Успешный минт Jennie! https://scan.testnet.initia.xyz/initiation-1/txs/${res.txhash} \n`)
     })
             
 
     } catch (error) {
         logger.error(`Error Jennie mint NFT: ${error?.response?.data?.message}`, error?.response?.data)
-        await random_SecondsDelay(300, 800)
+        await random_SecondsDelay(600, 1200)
         await mintTaskNFT(mnemonic, address)
     }
 }

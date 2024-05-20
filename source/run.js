@@ -36,8 +36,9 @@ async function week01() {
     //logger.info('Не прошли первую неделю: ', users.length, ' аккаунтов \n')
     
     await Promise.all(users.map(async (user) => {
-            let logger = makeLogger(`${user.address.slice(0, 22)}`)
-        logger.info('Аккаунт в работе')
+        let logger = makeLogger(`${user.address.slice(0, 22)}`)
+        logger.info('Аккаунт в работе \n')
+        await random_MinutesDelay(2, 10)
         let stages = await mintNFT(user.address)
         let jennieStatus = stages.is_minted //@return false or true
         let tasks = stages.jennie_part_progresses //@return {}
@@ -64,12 +65,13 @@ async function week01() {
             }
         }
 
-        await random_MinutesDelay(0, 10)
+        await random_MinutesDelay(0, 15)
         let stages2 = await mintNFT(user.address)
         let tasks2 = stages.jennie_part_progresses
         let Jenny = tasks2.every(task => task.is_minted);
 
         if(Jenny) {
+            await random_MinutesDelay(5, 35)
             logger.info('Jennie NFT Minted... \n')
             await buildJennie(user.seed_phrase, user.address)
         }

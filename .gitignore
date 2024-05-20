@@ -3,6 +3,7 @@ node_modules
 .env
 ./node_modules
 /data/proxy.txt
+/data/config.js
 /data/wallet.txt
 log.txt
 index.js

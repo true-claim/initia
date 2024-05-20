@@ -95,73 +95,10 @@ async function jennieStat(address) {
             logger.warn('Jennie mint? => ', false)
             return
         }
-        console.log('Jennie Stat...', error) 
+        logger.error('Jennie Stat...', error) 
     }
 }
 
 
 
 export {balanceXP, mintNFT, jennieStat}
-
-
-
-///////
-class Fetch {
-    userAgent;
-    constructor() {
-        this.userAgent = userAgent();
-        this.proxy = getProxy();
-        this.proxyAgent = new HttpsProxyAgent(`http://${this.proxy}`);
-        this.jar = new CookieJar();
-        this.client = COOKIE
-            ? wrapper(axios.create({ jar: this.jar }))
-            : axios.create({});
-    }
-
-    async post(url = '', data = {}, headers = {}) {
-        let logger = makeLogger(`POST:`);
-        try {
-            let proxyConfig;
-            if (PROXY) {
-                proxyConfig = { httpsAgent: this.proxyAgent };
-            }
-
-            let request = this.client.post(url, data, {
-                headers: {
-                    ...headers,
-                },
-                ...proxyConfig,
-            });
-            return request;
-        } catch (error) {
-            console.error('Error making POST request:', error.code);
-            throw error;
-        }
-    }
-
-    async get(url, headers = {}) {
-        let logger = makeLogger(`GET:`);
-        try {
-            let proxyConfig;
-            if (PROXY) {
-                proxyConfig = { httpsAgent: this.proxyAgent };
-            }
-
-            //в скрипте https://api.ipify.org?format=json на меняем параметр функции get(url, )
-            let request = this.client.post(
-                'https://api.ipify.org?format=json',
-                {
-                    headers: {
-                        ...headers,
-                    },
-                    ...proxyConfig,
-                }
-            );
-            console.log(request.data); //сейчас запрос на прокси
-            return request;
-        } catch (error) {
-            logger.error('Error GET request:', error);
-            throw error;
-        }
-    }
-}
