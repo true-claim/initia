@@ -1,0 +1,36 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "sqlite"
+    url      = env("DATABASE_URL")
+}
+
+model Jennie {
+    id            Int      @id @default(autoincrement())
+    seed_phrase   String   @unique
+    address       String?  @unique
+    discord_token String?
+    xp            Int?
+    proxy         String?
+    cookie        String?
+    userAgent     String?
+    status        Status[]
+}
+
+model Status {
+    id         Int      @id
+    account_id Jennie   @relation(fields: [id], references: [id])
+    week_01    Boolean? @default(value: false)
+    week_02    Boolean? @default(value: false)
+    week_03    Boolean? @default(value: false)
+    week_04    Boolean? @default(value: false)
+    week_05    Boolean  @default(value: false)
+    week_06    Boolean? @default(value: false)
+    week_07    Boolean? @default(value: false)
+    week_08    Boolean? @default(value: false)
+}

@@ -1,0 +1,29 @@
+{
+  "name": "initia",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node source/run.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@faker-js/faker": "^8.4.1",
+    "@initia/initia.js": "^0.2.0",
+    "@prisma/client": "^5.14.0",
+    "axios-cookiejar-support": "^5.0.2",
+    "delay": "^6.0.0",
+    "https-proxy-agent": "^7.0.4",
+    "inquirer": "^9.2.22",
+    "tough-cookie": "^4.1.4",
+    "tslog": "^4.9.2",
+    "user-agents": "^1.1.208"
+  },
+  "devDependencies": {
+    "prisma": "^5.14.0"
+  }
+}
