@@ -53,6 +53,7 @@ async function balanceXP(address) {
 
         let balance = JSON.parse(request.data.data)
         logger.info(balance, ` — (account ${address.slice(4, 24)})`)
+        return balance
         //await updateXP(address, balance)
     } catch (error) {
         logger.error(error)
@@ -89,6 +90,7 @@ async function jennieStat(address) {
 
         let responseJson = JSON.parse(request.data.data)
         logger.info('Jennie HP => ', responseJson.hp, "HP")
+        return responseJson;
     } catch (error) {
         if(error?.response?.data?.code === 3) {
             logger.warn('Jennie mint? => ', false)

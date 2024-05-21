@@ -92,18 +92,37 @@ async function week01() {
 async function feed() {
     let logger = makeLogger('feed')
     let users = await getUsers()
-    for (let user of users) {
+    await Promise.all(users.map(async (user) => {
+        await random_MinutesDelay(3, 20)
         let xp = await balanceXP(user.address)
         if(xp < 200) {
             logger.info('Не хватает XP на еду.')
-            continue;
+            return false;
+        }
+        let stst = await jennieStat(user.address)
+             if(stst.hp > 1) {
+            logger.info(`Jennie HP > 1 (HP=${stst.hp}). Skip account... \n`)
+            return false
         }
         await drawFood(user.seed_phrase, user.address)
         await feedJennie(user.seed_phrase, user.address)
-        let xpnew = await balanceXP(user.address)
-        logger.info('XP NEW ->', xpnew, '\n')
-    }
+        let xpnew = await jennieStat(user.address)
+    }))
 }
+// async function feed() {
+//     let logger = makeLogger('feed')
+//     let users = await getUsers()
+//     for (let user of users) {
+//         let xp = await balanceXP(user.address)
+//         if(xp < 200) {
+//             logger.info('Не хватает XP на еду.')
+//             continue;
+//         }
+//         await drawFood(user.seed_phrase, user.address)
+//         await feedJennie(user.seed_phrase, user.address)
+//         let xpnew = await jennieStat(user.address)
+//     }
+
 
 async function EXAMPLE() {
     let users = await getUsers()

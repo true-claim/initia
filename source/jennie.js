@@ -1,5 +1,6 @@
 import {balanceXP, jennieStat, mintNFT} from '../module/request.js'
 import { Wallet, LCDClient, MnemonicKey, MsgSend, MsgExecute, bcs, MsgDelegate, MsgWithdrawDelegatorReward } from '@initia/initia.js';
+import {buildJennie} from '../source/week/week1_pashka.js';
 
 import { makeLogger } from '../utils/logger.js';
 import {random_MinutesDelay} from '../utils/random.js';
@@ -13,12 +14,11 @@ const lcd = new LCDClient('https://lcd.initiation-1.initia.xyz/', {
 async function drawFood(mnemonic, address){
 
     let logger = makeLogger('drawFood')
-    //await random_MinutesDelay(1, 5) 
+    await random_MinutesDelay(5, 20) 
 
     try {
 
         let Jennieeady = await mintNFT(address);
-        console.log(Jennieeady)
         if(!Jennieeady.is_minted) {
             logger.info('Jennie NFT Null. Skip account... \n')
             return false;
@@ -44,7 +44,8 @@ async function drawFood(mnemonic, address){
 
             const signedTx = await wallet.createAndSignTx({ msgs });
             let broadcastResult = await lcd.tx.broadcastSync(signedTx).then(res => {
-                if(res.code === 400) {
+                console.log(res)
+                if(res.code === 400 || res.code === 1) {
                     throw res.raw_log
                 }
                 logger.info(`Успешый купил Common ХАВЧИК: https://scan.testnet.initia.xyz/initiation-1/txs/${res.txhash}`)
@@ -54,7 +55,7 @@ async function drawFood(mnemonic, address){
 
     } catch (error) {
         logger.error(`Error drawFood ${error}`) //_redirectable
-        await random_MinutesDelay(5, 20) 
+        await random_MinutesDelay(5, 15) 
         await drawFood(mnemonic, address)
     }
 }
@@ -62,7 +63,7 @@ async function drawFood(mnemonic, address){
 async function feedJennie(mnemonic, address){
 
     let logger = makeLogger('feedJennie')
-    await random_MinutesDelay(10, 20) 
+    await random_MinutesDelay(5, 23) 
 
     try {
 
@@ -92,7 +93,7 @@ async function feedJennie(mnemonic, address){
 
             const signedTx = await wallet.createAndSignTx({ msgs });
             let broadcastResult = await lcd.tx.broadcastSync(signedTx).then(res => {
-                if(res.code === 400) {
+                if(res.code === 400 || res.code === 1) {
                     throw res.raw_log
                 }
                 logger.info(`Наелась и спит: https://scan.testnet.initia.xyz/initiation-1/txs/${res.txhash}`)
@@ -102,7 +103,7 @@ async function feedJennie(mnemonic, address){
 
     } catch (error) {
         logger.error(`Error feedJennie ${error}`) //_redirectable
-        await random_MinutesDelay(5, 20) 
+        await random_MinutesDelay(5, 15) 
         await feedJennie(mnemonic, address)
     }
 }

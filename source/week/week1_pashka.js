@@ -68,9 +68,7 @@ async function task1(mnemonic, address) {
                 );
                 const signedTx = await wallet.createAndSignTx({ msgs: [sendMsg] });
                 const broadcastResult = await lcd.tx.broadcast(signedTx).then((result) => {
-                    if(result.code === 400) {
-                    throw res.raw_log
-                }
+                    if(res.code === 400 || res.code === 1) throw res.raw_log
                     logger.info(`Successfully bought domain! ${result?.txhash}`);
                 })
                 
@@ -92,7 +90,7 @@ async function task1(mnemonic, address) {
                     [], [nameCode])
                 const signedTxset = await wallet.createAndSignTx({msgs: [setMsg]})
                 const broadcastResult2 = await lcd.tx.broadcast(signedTxset).then((result) => {
-                    if(res.code === 400) throw res.raw_log
+                    if(res.code === 400 || res.code === 1) throw res.raw_log
             
                 logger.info(`Successfully set name!`);
 
@@ -148,7 +146,7 @@ async function task2(mnemonic, address) {
 
             const signedTx = await wallet.createAndSignTx({ msgs });
             let broadcastResult = await lcd.tx.broadcastSync(signedTx).then(res => {
-                if(res.code === 400) throw res.raw_log
+                if(res.code === 400 || res.code === 1) throw res.raw_log
                 logger.info(`Успешый свапнул: https://scan.testnet.initia.xyz/initiation-1/txs/${res.txhash}`)
             })
             
@@ -197,7 +195,7 @@ async function task3(mnemonic, address) {
                     }
                     retryStake()
                 }
-                if(res.code === 400) throw res.raw_log
+                if(res.code === 400 || res.code === 1) throw res.raw_log
 
                 logger.info('Успешный стейкинг стейкинг: https://scan.testnet.initia.xyz/initiation-1/txs/' + res.txhash)
             });
@@ -254,7 +252,7 @@ async function task4(mnemonic, address) {
 
             const signedTx = await wallet.createAndSignTx({ msgs });
             let broadcastResult = await lcd.tx.broadcastSync(signedTx).then((res) => {
-                                    if(res.code === 400) throw res.raw_log
+                if(res.code === 400 || res.code === 1) throw res.raw_log
 
                 logger.info(`Успешый lp provide: https://scan.testnet.initia.xyz/initiation-1/txs/${res.txhash}`)
             })
@@ -293,7 +291,7 @@ async function task5(mnemonic, address) {
 
         const signedTx = await wallet.createAndSignTx({ msgs });
         let broadcastResult = await lcd.tx.broadcastSync(signedTx).then(res => {
-                                if(res.code === 400) throw res.raw_log
+                                if(res.code === 400 || res.code === 1) throw res.raw_log
 
             logger.info(`Успешый минт реварда: https://scan.testnet.initia.xyz/initiation-1/txs/${res.txhash}`)
         });
@@ -367,7 +365,7 @@ async function mintTaskNFT(mnemonic, address, numberNFT) {
     })
     
     const broadcastResult = await lcd.tx.broadcast(signedTx).then(res => {
-                          if(res.code === 400) throw res.raw_log
+                          if(res.code === 400 || res.code === 1) throw res.raw_log
 
         logger.info(`Успешый минт NFT! https://scan.testnet.initia.xyz/initiation-1/txs/${res.txhash} \n`)  
     })
@@ -407,8 +405,7 @@ async function buildJennie(mnemonic, address) {
     })
     
     const broadcastResult = await lcd.tx.broadcast(signedTx).then(res => {
-                         if(res.code === 400) throw res.raw_log
-
+        if(res.code === 400 || res.code === 1) throw res.raw_log
         logger.info(`Успешный минт Jennie! https://scan.testnet.initia.xyz/initiation-1/txs/${res.txhash} \n`)
     })
             
